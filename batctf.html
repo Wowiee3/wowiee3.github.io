@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>/home/wowiee/writeups/batctf</title>
+    <meta name="author" content="name" />
+    <meta name="description" content="description here" />
+    <meta name="keywords" content="keywords,here" />
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css"/>
+    <style>
+    	.center {
+    		display: block;
+    		margin-left: auto;
+    		margin-right: auto;
+    	}
+
+    	.left {
+    		float: left;
+    		margin: 10px;
+    	}
+
+    	.right {
+    		float: right;
+    		margin: 10px;
+    	}
+    </style>
+    <!--Replace with your tailwind.css once created-->
+  </head>
+
+  
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+
+	<nav id="header" class="fixed w-full z-10 top-0">
+
+		<div id="progress" class="h-1 z-20 top-0" style="background:linear-gradient(to right, #4dc0b5 var(--scroll), transparent 0);"></div>
+
+		<div class="w-full md:max-w-4xl mx-auto flex flex-wrap items-center justify-between mt-0 py-3">
+
+			<div class="pl-4">
+				<a class="text-gray-900 text-base no-underline hover:no-underline font-extrabold text-xl" href="index.html">
+					Wowiee!!!
+				</a>
+			</div>
+
+			<div class="block lg:hidden pr-4">
+				<button id="nav-toggle" class="flex items-center px-3 py-2 border rounded text-gray-500 border-gray-600 hover:text-gray-900 hover:border-grey-500 appearance-none focus:outline-none">
+					<svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+						<title>Wowiee / Home</title>
+						<path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+					</svg>
+				</button>
+			</div>
+
+			<div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-gray-100 md:bg-transparent z-20" id="nav-content">
+				<ul class="list-reset lg:flex justify-end flex-1 items-center">
+					<li class="mr-3">
+						<a class="inline-block py-2 px-4 text-gray-600 no-underline" href="index.html">/home</a>
+					</li>
+					<li class="mr-3">
+						<a class="inline-block text-gray-900 font-bold no-underline hover:text-gray-900 hover:text-underline py-2 px-4" href="writeups.html">/writeups</a>
+					</li>
+					<li class="mr-3">
+						<a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:text-underline py-2 px-4" href="constr.html">/computers</a>
+					</li>
+					<li class="mr-3">
+						<a class="inline-block text-gray-600 no-underline hover:text-gray-900 hover:text-underline py-2 px-4" href="constr.html">/misc</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<!--Container-->
+	<div class="container w-full md:max-w-3xl mx-auto pt-20">
+
+		<div class="w-full px-4 md:px-6 text-xl text-gray-800 leading-normal" style="font-family:Georgia,serif;">
+
+			<!--Title-->
+			<div class="font-sans">
+						<h1 class="font-bold font-sans break-normal text-gray-900 pt-6 pb-2 text-3xl md:text-4xl">BATxAPU Internal CTF 2022</h1>
+						<p class="text-sm md:text-base font-normal text-gray-600">
+							This was an internal ctf that took place in my university, it was sponsored by the British American Tobacco association (BAT) which is crazy to me. Do hackers like smoking a lot or something?
+						</p>
+			</div>
+
+			<p class="py-6">
+				 Jump to: <a class="text-green-500 no-underline hover:underline" href="#brain">My brain can't handle this</a> / <a class="text-green-500 no-underline hover:underline" href="#dead">Dead</a>
+			</p>
+
+			<h2 class="font-bold font-sans break-normal text-gray-800 pt-6 pb-2 text-2xl md:text-3xl" id="brain">My brain can't handle this [100pts]</h2>
+
+			<p class="py-6">
+				 For this challenge, we are given a .txt file called "giberish.txt". Let's open it up and see what's inside!  
+			</p>
+
+			<pre class="bg-gray-900 rounded text-white font-mono text-base p-2 md:p-4">
+				<code class="break-words whitespace-pre-wrap">
+8+3sLvWcsa+tTbcpa52++G1fp0cN7[+3vMk46Dv9+c+83R2CjGcn+>56bTsPcAqMbC--02CbgWHfca5-<8JdAeQIc]>wCnbWAnttsf16-.ESbhdawkuB541vh3VC-3386dcO.1H5C2c6c2nmcDF>oCwAsdeNCdaOPc-[WamFhs5B38g-w75-8vwPc->e93GvB+<3CadOPcw]>7Gcd4GlM-.6dK4IQs>-5GcShj[4wGHvDa23cNgC---8AscJr4C21--lL3CaA>9+7&lt;NcAsdN]>Mp2CsKclo-.61C2vgaDb.-itCweTaNc[--tTaSCjUY--5Scb1w03->McE2IpDca+W+Dh<67]>oaChMct+7.AsLpa6NBcy-9-0-0-hcxW.aD19-[0pLCaWf-6NmcFvK-333Kc1dYD-9HdWplD>++DvAw++2DkC&lt;LLiecn]>wCut3cemNc.-1OcAwbwamj-a-8iCasnE[3Swplcjawhg->jITHjvgi98aw2FJSAWDKJ+3+vvnjaw5+JNks+whrgsw+WADhsjy<]JBfykjsaawdyhgnfgb>.4frgs2dsfgEWGuk+waf+piug+AWDdf+512+asdGESg+%#vHJRE.3-fEa[-SAEG>++DHT12CAasdh5asf++Avcag3+GEs+12VGE<9CAW]>+8g3314v.iCPldfLc--pTTwcU--Ycaw-TT.[-74HHfrf7>+awbRr+&lt;RFdjQQsfP]>-CCw24HauruU.-WAh8721TREfaw66--ffD---9h.ca45haWeUcTpLc4FC62>FGc2kj-[dWyUkjcaW-3T-99oCw0gfHpCWf---wW7>9d+c8M&lt;TUc]rK>.75VC[w-kFwyr46FaDheJfg4H0>+78VekjSk+<3cHR]>-.$2-54BeavJ^5V--WA4$6-c12kjNT&%-V315%&^$%cWA13-#$-1VC32!%@^b543--V43244--H%$.[YUc32^-F#-C-#>*f32@#%vc+rth%YF++34@%+<]GHwafTY^>++GJWYRV^!f3b432df.--()h42vF#TYdsf3[-CJRcvgW>#^+FRpffc#@%^@^&*veeaw@fhjSJed++G$++<]>+.nequE>-po$Frro-[-fuGit1->iure2175634+5+091+vc33<]t3>mnaw%#vc.
+				</code>
+			</pre>
+
+			<p class="py-6">
+				 Well, that definitely is 'giberish.txt'. Alright, so at first this seems indecipherable, but in many ctfs, the name of the challenge can help a lot. 'My brain can't handle this' reminds me of an esoteric programming language by the name of <a class="text-green-500 no-underline hover:underline" href="https://en.wikipedia.org/wiki/Brainfuck">Brainf**k</a> (I can use swear words in my own webpage, right? It's just the name of the language..). Anyways, this language comes up a lot in ctfs, and its easily recognizable because of its use of + and -. If you see a lot of + and - in a challenge, your brain should immediately explode because it's uh, getting f***ed.
+			</p>
+
+			<p class="text-sm md:text-base font-normal text-gray-600">
+				NOTE: there are characters other than + and - in brainf**k, those 2 are just the most recognizable. 
+			</p>
+
+			<p class="py-6">
+				Ok so in our file there are actually a lot of + and -'s, so this is probably brainf**k! But in between are a bunch of other characters that we don't need. Of course we could just manually remove those one by one, but we want to look cool and nerdy, so let's write a python script to remove it for us! It doesn't have to be super optimized or anything, so just whip up anything that works. 
+			</p>
+
+			<p class="py-6">
+				Looking on the brainf**k wikipedia article, brainf**k uses "+", "-", "<", ">", ".", ","(comma), "[", and "]". So based on this let's write our script!
+			</p>
+
+			<pre class="bg-gray-900 rounded text-white font-mono text-base p-2 md:p-4">
+				<code class="break-words whitespace-pre-wrap">
+text = open("giberish.txt")
+flag =""
+brain = ["+", "-", ".", ",", "[", "]", "<", ">"]
+
+for char in text:
+	if char in brain:
+		flag += char
+	else:
+		continue
+
+print(flag)
+				</code>
+			</pre>
+
+			<p class="text-sm md:text-base font-normal text-gray-600">
+				EXPLANATION: The script first opens the 'giberish.txt' file. A 'flag' variable is created to store our flag, and a list called 'brain' is created which contains the list of characters used in brainf**k.
+
+				We create a for loop that looks through each character in the file. If the character is in the 'brain' list, it is added to the flag variable. If not, the loop continues. After looking through the entire file, the flag is printed.
+			</p>
+
+			<p class="py-6">
+				Now let's save this script as 'brain.py' and check the results!
+			</p>
+
+			<pre class="bg-gray-900 rounded text-white font-mono text-base p-2 md:p-4">
+				<code class="break-words whitespace-pre-wrap">
+python3 brain.py
+++++[++++>---<]>-.-.>-[--->+<]>-.>-[----->+<]>-..-[----->++<]>+.----.-[--->++++<]>.---[->+++++<]>.++++++.-[->++++++<]>+.-----.[->++<]>-.------.>-[----->+<]>.[->++<]>-.-----------.[--->++++<]>++.--[->+++++<]>+.>--[-->+++<]>.
+				</code>
+			</pre>
+
+			<p class="py-6">
+				So that's our brainf**k code! Let's run it through an online decoder to get our flag!
+			</p>
+
+			<img src = "brainfk.png" class = "center">
+
+			<p class="text-sm md:text-base font-normal text-gray-600">
+				Decoder used: <a class="text-green-500 no-underline hover:underline" href="https://www.dcode.fr/brainfuck-language">dcode.fr</a>
+			</p>
+
+			<p class="py-6">
+				Flag: BAT22{wHY_50_Y3eZzY}
+			</p>
+
+			<h2 class="font-bold font-sans break-normal text-gray-800 pt-6 pb-2 text-2xl md:text-3xl" id="dead">Dead [100pts]</h2>
+
+			<p class="py-6">
+				Description: Yeah... Imma just leave you to rot on your own..
+				ON:??*e0D_kA_}$A11@aC@_Bhc@e_@m1_e1C$D_DEFCBA1p
+			</p>
+
+			<p class="py-6">
+				For this challenge we were just given an ominous description without a file. Luckily for us, we know that the title and description of a challenge can help a lot! First, I googled 'dead cipher', but got nothing. Then I looked closer at the description. "To <i>rot</i> on your own...". It finally clicked that we were looking at a ROT cipher, or a rotation cipher.
+			</p>
+
+			<p class="py-6">
+				The way a ROT cipher works is that it shifts characters forward to encode it. So for example, if I wanted to encode the word "WOWIEE" using ROT13 (shifting 13 characters, I would get "JBJVRR". And luckily for us, the first 4 letters of the weird text from our ominous description looked very much like the start of our flag format (BAT22) so hooray! This is definitely a rot cipher.
+			</p>
+
+			<p class="py-6">
+				However, the challenge isn't that simple, as simply converting the whole string with rot13 gives us this:
+			</p>
+
+			<img src = "dead1.png" class = "center">
+
+			<p class="text-sm md:text-base font-normal text-gray-600">
+				Decoder used: <a class="text-green-500 no-underline hover:underline" href="https://www.dcode.fr/rot-13-cipher">dcode.fr</a>
+			</p>
+
+			<p class="py-6">
+				Uh, what the heck is wrong with this thing? Looks like our guess was only half correct. I didn't manage to finish this challenge during the ctf, but after it ended one of the challenge creators told me I needed to use ROT47 as well. ROT47 is what its name implies; shift forward 47, but it also includes <i>more ascii characters.</i>
+			</p>
+
+			<p class="text-sm md:text-base font-normal text-gray-600">
+				^^This should have tipped me off the first time I saw it. ROT13 only uses alphabets, so as soon as I saw the other symbols in the string (@, *, $) I should have recognized it as ROT47. Don't make the same mistake I did!
+			</p>				
+
+			<p class="py-6">
+				So now we know we have to use both ROT13 and ROT47. But converting back and forth is tiresome, so let's use a different decoder for this challenge. A valuable resource for all you crypto nerds is <a class="text-green-500 no-underline hover:underline" href="https://gchq.github.io/CyberChef/">CyberChef</a>. It allows us to create 'recipies' by mixing different ciphers, so it would be perfect for this challenge. 
+			</p>		
+
+			<p class="py-6">
+				After messing around a bit in cyberchef, if we decode in the order of ROT47/ROT13/ROT47/ROT13 we'll finally get this result!:
+			</p>
+
+			<img src = "dead2.png" class = "center">
+			<p class="text-sm md:text-base font-normal text-gray-600">
+				Decoder used: <a class="text-green-500 no-underline hover:underline" href="https://gchq.github.io/CyberChef/">CyberChef</a>
+
+			<p class="py-6">
+				Flag: BAT22{r07_x4_ch4113n63_5up3r_3z1_r16h7_7896541}
+			</p>
+
+			<pre class="bg-gray-900 rounded text-white font-mono text-base p-2 md:p-4">
+				<code class="break-words whitespace-pre-wrap">
+ _______________________________________________
+| These are the only challenges I did           |
+| writeups for (I cheesed my way through the    | 
+| others).                                      |
+|    This was the first CTF I attended          |
+|    physically, and my team ended up placing   |
+|    7th! I had a lot of fun, and learned a lot!|
+|_______________________________________________|
+      \
+		   \  ____
+    		,'   Y`.
+		   /        \
+		   \ ()  () /       --wowiee 
+		    `. /\ ,'
+		     | "" |
+		     `LLLU'
+				</code>
+			</pre>
+
+		</p>
+		<br>
+	</div>
+	<div class = "square">
+		<div>
+			<img src = "batctf.jpg" class = "center">
+			<img src = "batscore.png" class = "center">			
+
+			<!--/ Post Content-->
+		<!--Divider-->
+		<hr class="border-b-2 border-gray-400 mb-8 mx-4">
+	<!--/container-->
+
+	<footer class="bg-white border-t border-gray-400 shadow">
+		<div class="container max-w-4xl mx-auto flex py-8">
+
+			<div class="w-full mx-auto flex flex-wrap">
+				<div class="flex w-full md:w-1/2 ">
+					<div class="px-8">
+						<h3 class="font-bold text-gray-900">About</h3>
+						<p class="py-4 text-gray-600 text-sm">
+							Hi!! I like computers. That's about it..
+						</p>
+					</div>
+				</div>
+
+				<div class="flex w-full md:w-1/2">
+					<div class="px-8">
+						<h3 class="font-bold text-gray-900">Social</h3>
+						<ul class="list-reset items-center text-sm pt-3">
+							<li>
+								<a class="inline-block text-gray-600 no-underline hover:text-gray-900 text-underline py-1" href="https://github.com/BlueShark8J">Github</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+	</footer>
+
+	<script>
+		/* Progress bar */
+		//Source: https://alligator.io/js/progress-bar-javascript-css-variables/
+		var h = document.documentElement,
+			b = document.body,
+			st = 'scrollTop',
+			sh = 'scrollHeight',
+			progress = document.querySelector('#progress'),
+			scroll;
+		var scrollpos = window.scrollY;
+		var header = document.getElementById("header");
+		var navcontent = document.getElementById("nav-content");
+
+		document.addEventListener('scroll', function() {
+
+			/*Refresh scroll % width*/
+			scroll = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
+			progress.style.setProperty('--scroll', scroll + '%');
+
+			/*Apply classes for slide in bar*/
+			scrollpos = window.scrollY;
+
+			if (scrollpos > 10) {
+				header.classList.add("bg-white");
+				header.classList.add("shadow");
+				navcontent.classList.remove("bg-gray-100");
+				navcontent.classList.add("bg-white");
+			} else {
+				header.classList.remove("bg-white");
+				header.classList.remove("shadow");
+				navcontent.classList.remove("bg-white");
+				navcontent.classList.add("bg-gray-100");
+
+			}
+
+		});
+
+
+		//Javascript to toggle the menu
+		document.getElementById('nav-toggle').onclick = function() {
+			document.getElementById("nav-content").classList.toggle("hidden");
+		}
+	</script>
+
+</body>
+
+</html>
