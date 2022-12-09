@@ -20,7 +20,7 @@ cusdis:
 
 user:
   name: Wowiee
-  pic: /assets/img/doloery.png
+  pic: /assets/img/pf.png
   picAlt: "Wowiee"
   job: i like vidya games and puters
   aboutme: true # comment this out if you don't need the 'about' page.
