@@ -1,0 +1,67 @@
+<head>
+  <link rel = "stylesheet" href = "style.css">
+  <title>Home paegg</title>
+</head>
+
+<div id = "home">
+<h1 id = "wow">Wowiee!</h1>
+<p id = "splash"></p>
+
+<br>
+
+<ul>
+<li><b><a href = "about.html">About Me</a></b></li>
+<li><b><a href = "https://github.com/Wowiee3">GitHub</a></b></li>
+<li><b>Blog Posts</b></li>
+<ul>
+  <li><a href = "posts/tech.html">[24/03/2023] My favorite pieces of tech</li>
+  <li><a href = "posts/ictf.html">[15/06/2022] BATxAPU ICTF Writeup</a></li>
+</ul>
+</ul>
+
+</div>
+<script>
+  let text;
+  var i = Math.floor(Math.random() * 11);
+  
+  switch (Math.floor(Math.random() * 11)) {
+    case 0:
+        text = "Present day... Present time! HAHAHAHAHAHA";
+        break;
+    case 1:
+        text = "There's a head attached to my neck and I'm *inside* of it";
+        break;
+    case 2:
+        text = "Play the guitar, play it again, my Johnny";
+        break;   
+    case 3:
+        text = "La Li Lu Le Lo";
+        break;
+    case 4:
+        text = "This text won't change when you leave!";
+        break;
+    case 5:
+        text = "Written in DOOM Emacs!";
+        break;
+    case 6:
+        text = "#include &ltsilly.h&gt";
+        break;
+    case 7:
+        text = "This website is filled with microplastics";
+        break;
+    case 8:
+        text = "TODO: Sanitize input fields";
+        break;
+    case 9:
+        text = "Interesting splash text...splash!";
+        break;
+    case 10:
+        text = "' OR 1=1";
+        break;
+    default:
+        text = "What? This isn't supposed to happen..";
+      break;
+  }
+  
+  document.getElementById("splash").innerHTML = "&#8674      " + text;
+</script>
