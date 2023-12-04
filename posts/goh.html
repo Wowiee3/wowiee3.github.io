@@ -1,0 +1,504 @@
+<head>
+  <link rel = "stylesheet" href= "../style.css">
+</head>
+
+<title>UniKL Game of Hackers CTF 2023</title>
+
+<a href = "../index.html" id = "back"> &#8672 ../ </a>
+
+<body id = "blog">
+<h2>UniKL Game of Hackers 2023</h2>
+
+<blockquote>This is the second physical CTF I've attended, and the first time I represented my university for an external event. It was also the first time my university sponsored a team for a CTF... hopefully they'll sponsor more teams in the future!</blockquote>
+
+<i>Forgive me... I forgot the names of the questions, so the ones written were made up by me.</i>
+
+<br> <br>
+<h3> &#8674 Easy Rev 1 [50pts] </h3>
+
+<p>
+We're given a reverse.py file. Python RE is super easy since we can see the source code! But let's run the program first (in the same directory as the encoded flag file) to see what it does.
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    > python3 reverse.py
+    Please enter correct 1st password for flag: <i>test</i>
+    Please enter correct 2nd password for flag: <i>test</i>
+    That password is incorrect
+  </blockquote>
+</div>
+<br>
+
+<p>
+  Looks like they're asking for two passwords in exchange for the flag. Let's look at the source code to see if we can find them.
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+import sys
+
+a = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
+    "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ "
+
+def arg133(arg432):
+    if arg432 == a[38] + a[78] + a[67] + a[89] + a[72] + a[43] + a[75] + a[31] + a[53] + a[50] +<br> a[42] + a[16] + a[77] + a[70] + a[38] + a[71] + a[16] + a[67] + a[15] + a[81] + a[19] + a[39]:
+        return True
+    else:
+        print(a[51] + a[71] + a[64] + a[83] + a[94] + a[79] + a[64] + a[82] + a[82] + a[86] + a[78] +
+              a[81] + a[67] + a[94] + a[72] + a[82] + a[94] + a[72] + a[77] + a[66] + a[78] + a[81] +
+              a[81] + a[68] + a[66] + a[83])
+        sys.exit(0)
+        return False
+
+
+def arg111(arg444):
+    return arg122(arg444.decode(), a[62])
+
+
+def arg232():
+    arg282 = input(a[47] + a[75] + a[68] + a[64] + a[82] + a[68] + a[94] + a[68] + a[77] + a[83] +
+                   a[68] + a[81] + a[94] + a[66] + a[78] + a[81] + a[81] + a[68] + a[66] + a[83] +
+                   a[94] + a[16] + a[82] + a[83] + a[94] + a[79] + a[64] + a[82] + a[82] + a[86] +
+                   a[78] + a[81] + a[67] + a[94] + a[69] + a[78] + a[81] + a[94] + a[69] + a[75] +
+                   a[64] + a[70] + a[25] + a[94])
+
+    if arg282 == '':
+        print("Password 1 is empty")
+        sys.exit(0)
+
+    arg383 = input(a[47] + a[75] + a[68] + a[64] + a[82] + a[68] + a[94] + a[68] + a[77] + a[83] +
+                   a[68] + a[81] + a[94] + a[66] + a[78] + a[81] + a[81] + a[68] + a[66] + a[83] +
+                   a[94] + a[17] + a[82] + a[83] + a[94] + a[79] + a[64] + a[82] + a[82] + a[86] +
+                   a[78] + a[81] + a[67] + a[94] + a[69] + a[78] + a[81] + a[94] + a[69] + a[75] +
+                   a[64] + a[70] + a[25] + a[94])
+
+    if arg383 == '':
+        print("Password 2 is empty")
+        sys.exit(0)
+
+    if arg282 is not None and arg383 is not None:
+        arg888 = arg282 + arg383
+        return arg888
+
+
+def arg132():
+    return open('flag.txt.enc', 'rb').read()
+
+
+def arg112():
+    print(a[54] + a[68] + a[75] + a[66] + a[78] + a[76] + a[68] + a[94] + a[65] + a[64] + a[66] +
+          a[74] + a[13] + a[13] + a[13] + a[94] + a[88] + a[78] + a[84] + a[81] + a[94] + a[69] +
+          a[75] + a[64] + a[70] + a[11] + a[94] + a[84] + a[82] + a[68] + a[81] + a[25])
+
+
+def arg122(arg432, arg423):
+    arg433 = arg423
+    i = 0
+    while len(arg433) < len(arg432):
+        arg433 = arg433 + arg423[i]
+        i = (i + 1) % len(arg423)
+    return "".join([chr(ord(arg422) ^ ord(arg442)) for (arg422, arg442) in zip(arg432, arg433)])
+
+arg444 = arg132()
+arg432 = arg232()
+arg133(arg432)
+arg112()
+arg423 = arg111(arg444)
+print(arg423)
+sys.exit(0)
+  </blockquote>
+</div>
+<br>
+
+<p>
+  We have some pretty obfuscated code here. Not only are the functions given unhelpful names, but their messages are obfuscated as well. If you don&#39t know how, at the start of the code there&#39s a variable <b>a</b>, which contains a string of characters. The messages are printed out by printing a character in the string at a specific index. For example, <b>HELLO</b> is obfuscated to be a[40] + a[37] + a[44] + a[44] + a[47].
+</p>
+
+<p>
+  We could manually deobfuscate it by counting the characters to match the index.. or we could be smart about it by debugging the code to see what each function does. We can run this in the terminal to run function arg112():
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    > python3 -c 'import reverse.py; arg112()'
+    Please enter correct 1st password for flag: <i>as</i>
+    Please enter correct 2nd password for flag: <i>asd</i>
+    That password is incorrect
+  </blockquote>
+</div>
+<br>
+
+<p>
+  Looks like arg112() is the function that prompts the user input! We can rename each instance of arg112() in our source code file to prompt() so we can understand it better. Let's do this for all the functions to get the following:
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+import sys
+
+a = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
+    "[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~ "
+
+def check_pw(arg432):
+    if arg432 == a[38] + a[78] + a[67] + a[89] + a[72] + a[43] + a[75] + a[31] + a[53] + a[50] +<br> a[42] + a[16] + a[77] + a[70] + a[38] + a[71] + a[16] + a[67] + a[15] + a[81] + a[19] + a[39]:
+    # compares with GodziLl@VSK1ngGh1d0r4H
+        return True
+    else:
+        print(a[51] + a[71] + a[64] + a[83] + a[94] + a[79] + a[64] + a[82] + a[82] + a[86] + a[78] +
+              a[81] + a[67] + a[94] + a[72] + a[82] + a[94] + a[72] + a[77] + a[66] + a[78] + a[81] +
+              a[81] + a[68] + a[66] + a[83]) # that password is incorrect
+        sys.exit(0)
+        return False
+
+
+def decode_flag(encoded_flag):
+    return arg122(encoded_flag.decode(), a[62])
+
+
+def combine_input():
+    arg282 = input(a[47] + a[75] + a[68] + a[64] + a[82] + a[68] + a[94] + a[68] + a[77] + a[83] +
+                   a[68] + a[81] + a[94] + a[66] + a[78] + a[81] + a[81] + a[68] + a[66] + a[83] +
+                   a[94] + a[16] + a[82] + a[83] + a[94] + a[79] + a[64] + a[82] + a[82] + a[86] +
+                   a[78] + a[81] + a[67] + a[94] + a[69] + a[78] + a[81] + a[94] + a[69] + a[75] +
+                   a[64] + a[70] + a[25] + a[94])
+                    # Please enter correct 1st password
+
+    if arg282 == '':
+        print("Password 1 is empty")
+        sys.exit(0)
+
+    arg383 = input(a[47] + a[75] + a[68] + a[64] + a[82] + a[68] + a[94] + a[68] + a[77] + a[83] +
+                   a[68] + a[81] + a[94] + a[66] + a[78] + a[81] + a[81] + a[68] + a[66] + a[83] +
+                   a[94] + a[17] + a[82] + a[83] + a[94] + a[79] + a[64] + a[82] + a[82] + a[86] +
+                   a[78] + a[81] + a[67] + a[94] + a[69] + a[78] + a[81] + a[94] + a[69] + a[75] +
+                   a[64] + a[70] + a[25] + a[94])
+                    # Please enter correct 2nd password
+
+    if arg383 == '':
+        print("Password 2 is empty")
+        sys.exit(0)
+
+    if arg282 is not None and arg383 is not None:
+        arg888 = arg282 + arg383
+        return arg888
+
+
+def read_flagfile():
+    return open('flag.txt.enc', 'rb').read()
+
+
+def prompt():
+    print(a[54] + a[68] + a[75] + a[66] + a[78] + a[76] + a[68] + a[94] + a[65] + a[64] + a[66] +
+          a[74] + a[13] + a[13] + a[13] + a[94] + a[88] + a[78] + a[84] + a[81] + a[94] + a[69] +
+          a[75] + a[64] + a[70] + a[11] + a[94] + a[84] + a[82] + a[68] + a[81] + a[25])
+
+
+def arg122(arg432, arg423):
+    arg433 = arg423
+    i = 0
+    while len(arg433) < len(arg432):
+        arg433 = arg433 + arg423[i]
+        i = (i + 1) % len(arg423)
+    return "".join([chr(ord(arg422) ^ ord(arg442)) for (arg422, arg442) in zip(arg432, arg433)])
+
+encoded_flag = read_flagfile()
+arg432 = combine_input()
+check_pw(arg432)
+prompt()
+arg423 = decode_flag(encoded_flag)
+print(arg423)
+sys.exit(0)
+  </blockquote>
+</div>
+<br>
+
+<p>
+  Now it&#39s easier to understand what the program does. It looks like it accepts our two inputs, concatenates it, then compares the concatenation against &quotGodziLl@VSK1ngGh1d0r4H&quot. Let&#39s run the program again with what we know!
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    > python3 reverse.py
+    Please enter correct 1st password for flag: <i>Godzill@VS</i>
+    Please enter correct 2nd password for flag: <i>K1ngGh1d0r4H</i>
+    Welcome back... your flag, user:
+    gohunikl{m0n4rch.s3cr37}
+  </blockquote>
+</div>
+<br>
+
+<br> <br>
+<h3> &#8674 Easy Rev 2 [100pts] </h3>
+
+<p>
+We're given an elf executable this time! After running the file command on it, let&#39s run it.
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    > chmod +x SecretMessage.elf
+    Enter the magic number to get the secret message: <i>69</i>
+    Wrong magic number. Try again.
+  </blockquote>
+</div>
+<br>
+
+<p>
+  A pretty standard crackme. Let&#39s open the file in gdb to look at the disassembly. I&#39m using the gef toolkit as well, to make things easier.
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    > gdb SecretMessage.elf
+  </blockquote>
+</div>
+<br>
+
+<p>
+  Then, let's disassemble the main function to see what's going on:
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+gef➤  disassemble main
+Dump of assembler code for function main:
+   0x00000000000011d5 <+0>:	push   rbp
+   0x00000000000011d6 <+1>:	mov    rbp,rsp
+   0x00000000000011d9 <+4>:	sub    rsp,0x70
+   0x00000000000011dd <+8>:	mov    DWORD PTR [rbp-0x8],0x12772
+   0x00000000000011e4 <+15>:	mov    DWORD PTR [rbp-0xc],0x3039
+   0x00000000000011eb <+22>:	mov    esi,0x3039
+   0x00000000000011f0 <+27>:	mov    edi,0x12772
+   0x00000000000011f5 <+32>:	call   0x1189 <_Z27calculateDynamicMagicNumberii>
+   0x00000000000011fa <+37>:	mov    DWORD PTR [rbp-0x10],eax
+   0x00000000000011fd <+40>:	lea    rax,[rip+0xe04]        # 0x2008
+   0x0000000000001204 <+47>:	mov    rsi,rax
+   0x0000000000001207 <+50>:	lea    rax,[rip+0x2e32]        # 0x4040 <_ZSt4cout@GLIBCXX_3.4>
+
+  <i>This goes on until main+369, but this is enough to show</i>
+  </blockquote>
+</div>
+<br>
+
+<p>
+  The disassembly was really long, but there's a function called <b>calculateDynamicMagicNumber</b> that catches the eye. Could that be the function that contains the magic number that we need? We can disassemble it to see what it does
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+gef➤  disassemble calculateDynamicMagicNumber(int, int)
+Dump of assembler code for function _Z27calculateDynamicMagicNumberii:
+   0x0000000000001189 <+0>:	push   rbp
+   0x000000000000118a <+1>:	mov    rbp,rsp
+   0x000000000000118d <+4>:	mov    DWORD PTR [rbp-0x14],edi
+   0x0000000000001190 <+7>:	mov    DWORD PTR [rbp-0x18],esi
+   0x0000000000001193 <+10>:	mov    DWORD PTR [rbp-0x4],0x0
+   0x000000000000119a <+17>:	mov    eax,DWORD PTR [rbp-0x14]
+   0x000000000000119d <+20>:	lea    ecx,[rax+rax*1]
+   0x00000000000011a0 <+23>:	mov    eax,DWORD PTR [rbp-0x18]
+   0x00000000000011a3 <+26>:	movsxd rdx,eax
+   0x00000000000011a6 <+29>:	imul   rdx,rdx,0x55555556
+   0x00000000000011ad <+36>:	shr    rdx,0x20
+   0x00000000000011b1 <+40>:	sar    eax,0x1f
+   0x00000000000011b4 <+43>:	sub    edx,eax
+   0x00000000000011b6 <+45>:	lea    eax,[rcx+rdx*1]
+   0x00000000000011b9 <+48>:	mov    DWORD PTR [rbp-0x4],eax
+   0x00000000000011bc <+51>:	mov    eax,DWORD PTR [rbp-0x18]
+   0x00000000000011bf <+54>:	and    eax,0x1
+   0x00000000000011c2 <+57>:	test   eax,eax
+   0x00000000000011c4 <+59>:	jne    0x11cc <_Z27calculateDynamicMagicNumberii+67>
+   0x00000000000011c6 <+61>:	add    DWORD PTR [rbp-0x4],0x64
+   0x00000000000011ca <+65>:	jmp    0x11d0 <_Z27calculateDynamicMagicNumberii+71>
+   0x00000000000011cc <+67>:	sub    DWORD PTR [rbp-0x4],0x32
+   0x00000000000011d0 <+71>:	mov    eax,DWORD PTR [rbp-0x4]
+   0x00000000000011d3 <+74>:	pop    rbp
+   0x00000000000011d4 <+75>:	ret
+  </blockquote>
+</div>
+<br>
+
+<p>
+  Let's see what this assembly does. You can use python for hex calculations using the hex() function.
+  <li>[+0 to +10] It initializes 3 variables at the start.</li>
+  <li>[+17] The contents of the variable at [rbp-0x14] is moved into eax. If we look back at the main function, the variable contains edi, and edi contains 0x12772.</li>
+  <li>[+20] Then, rax+rax*1 is loaded into ecx. Remember that eax is just the bottom half of rax, and currently eax is 0x12772. 0x12772 + 0x12772 = 0x24ee4.</li>
+  <li>[+23] Next, the contents of the variable at [rbp-0x18] is moved into eax. That variable contains esi, which is 0x3039.</li>
+  <li>[+26] The next instruction contains an interesting 'movsxd'. But it's not complicated. It just moves a value from a 32-bit register(eax) into a 64-bit register(rax) with sign extension. In this case, it just means 0x3039 is moved into rdx.</li>
+  <li>[+29] Then we do a signed multiplication of rdx * 0x55555556 (0x3039 * 0x55555556 = 0x10130002026) and store it in rdx.</li>
+  <li>[+36] Then we shift rdx right by 0x20 (32) bits. The result is 0x1013.</li>
+  <li>[+40] After that we do a Shift Arithmetic Right on eax by 0x1f (31) bits. This instruction is the same as Shift Right, but the sign bit is preserved (meaning it won't go from positive to negative or vice versa). But the result is just rax = 0x0...</li>
+  <li>[+43] Then we're subtracting eax from edx. Which is just subtracting zero so..</li>
+  <li>[+45] Next we're loading the contents of rcx + rdx into eax. 0x24ee4 + 0x1013 = 0x25ef7.</li>
+  <li>[+48] After that we move the contents of eax (0x25ef7) into the variable at [rbp-0x4].</li>
+  <li>[+51] And then we move the contents of the variable at [rbp-0x18] (0x3039) into eax.</li>
+  <li>[+54] A logical AND operation is performed between eax and 0x1 (11000000111001 AND 000000000000001 = 00000000000001.</li>
+  <li>[+57] A test instruction is performed on eax, eax. This is just a logical AND again, but the result sets the SF, ZF, and PF flags so we can perform jump operations (1 AND 1 = 1, of course).</li>
+  <li>[+59] We're doing a conditional jump here. The jne instruction checks if ZF = 1, and in this case, the previous test instruction did set it to 1, so the jump is taken all the way to [+67].</li>
+  <li>[+67] Over here we're subtracting 0x32 from the contents in [rbp-0x4] (0x25ef7 - 0x32 = 0x25ec5).</li>
+  <li>[+71] The contents in [rbp-0x4] are moved into eax.</li>
+</p>
+
+<p>
+  After that we pop and stack and return eax, which is 0x25ec5...which is 155333 in decimal. Could this be our magic number? Let's test it out.
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    > ./SecretMessage.elf
+    Enter the magic number to get the secret message: <i>155333</i>
+   gohunikl2023{w0w_U_G3t_Me}
+  </blockquote>
+</div>
+<br>
+
+<br> <br>
+<h3> &#8674 Challenge [150pts] </h3>
+
+<p>
+  Another python script. Alongside the script, we were given a string:
+</p>
+
+<blockquote>
+  杯桵湩歬㈰㈳筎ㅣ敟剥癥牳ㅮ杽
+</blockquote>
+
+<p>
+  My chinese isn't good enough to read this, so I googled this string. Turns out that it's gibberish. Well, we can run the python script:
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    > python3 Reverse.py
+    䵹当瑲楮杳
+  </blockquote>
+</div>
+<br>
+
+<p>
+  Some more chinese characters. Some sort of encoding script maybe? Time to look at the script itself:
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+my_string = "My_Strings"
+my_result = ""
+
+for i in range(0, len(my_string), 2):
+    my_first_letter = ord(my_string[i]) << 8
+    my_second_letter = ord(my_string[i + 1])
+    my_final = chr(my_first_letter + my_second_letter)
+    my_result += my_final
+
+print(my_result)
+  </blockquote>
+</div>
+<br>
+
+<p>
+  Okay! Looks like this is a sort of encryption script. The output we got is the ciphertext of the string "My_Strings". My guess is that we have to decrypt the string that was given to us at the start.
+</p>
+
+<p>
+  So what does the script do? Admittedly, I took some time to figure it out.
+  <li>First we create the necessary string variables</li>
+  <li>Then we loop over every two characters in my_string</li>
+  <li>We see the use of an ord() function. After looking it up, this function converts a character into an integer that represents that character in unicode.</li>
+  <li>Remember that we loop over every two characters. my_first_letter is set to the unicode representation of the first character, shifted left by 8 bits.</li>
+  <li>my_second_letter is simply set to the unicode representation of the second character in the loop.</li>
+  <li>The two integers are added together and converted back into ascii, which is set to my_final.</li>
+  <li>And that character is appended onto the my_result string.</li>
+</p>
+
+<p>
+  To decrypt our strings, we need to do this in reverse.. This would be pretty hard, since the two characters are added together. I scratched my head for this a lot, but when you run into a wall like this you can just try debugging.
+</p>
+
+<p>
+  I wrote a small debug script to better understand the program:
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    # This is added in the script within the for loop:
+
+    ...
+    my_result += my_final
+    print("First letter: ", my_string[i], ord(my_string[i]), my_first_letter)
+    print("Second letter: ", my_string[i + 1], my_second letter)
+    print("Final letter: ", (my_first_letter + my_second_letter), my_final)
+  </blockquote>
+</div>
+<br>
+
+<p>
+  This would give you something like this:
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    first letter:  M 77 19712
+    second letter:  y 121
+    final letter:  19833 䵹
+  </blockquote>
+</div>
+<br>
+
+<p>
+  We can understand a little more about character/unicode conversion this way and look for any patterns. For example, 77 shifted left 8 bits is 19712. This is because 77 in binary is 1001101 and shifting left by 8 bits is just adding 8 0&#39s to the end of it (The result being 100110100000000). But you see, when you shift right you 'take away' the bits at the end instead. And our final letter is made by adding the first letter and the second letter (which is a small number!). Let&#39s see... 19833, our final number, is 100110101111001 in binary. And if we take away 8 bits at the end.. we get 1001101! Which is our first letter!
+</p>
+
+<p>
+  We can take advantage of this quirk and write this decryption script:
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    decoded = ""
+    given = "杯桵湩歬㈰㈳筎ㅣ敟剥癥牳ㅮ杽"
+
+    for x in given:
+        chr1 = ord(x) >> 8
+        decoded += chr(chr1)
+        chr2 = ord(x) - (chr1 << 8)
+        decoded += chr(chr2)
+
+    print(decoded)
+  </blockquote>
+</div>
+<br>
+
+<p>
+  Over here we:
+  <li>Loop over every character in our given string</li>
+  <li>Shift it right by 8 bits and convert it back to ascii to get our first letter</li>
+  <li>Then we can subtract our given character by our first character shifted left by 8 bits again; the remainder would be our second letter.</li>
+</p>
+
+<p>
+  And by running it we would get our flag:
+</p>
+
+<br>
+<div id = "dash">
+  <blockquote id = "code">
+    > python3 rev.py
+    gohunikl2023{N1ce_Revers1ng}
+  </blockquote>
+</div>
+<br>
