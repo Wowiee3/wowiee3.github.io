@@ -1,0 +1,58 @@
+<head>
+	<link rel = "stylesheet" href= "../style.css"> 
+</head> 
+
+<title>HackTheBox Sherlock Writeups: Loggy and Heartbreak-Continuum</title>
+
+<a href = "../index.html" id = "back"> &#8672 ../ </a>
+
+<body id = "blog">
+	<h2>HackTheBox Sherlock Writeups</h2>
+	<blockquote>I recently got into doing sherlocks because I got a blue team internship so I reckoned I should try to do something more relevant for it. Honestly, I'm not sure if it'll help with my working skills but whatever, they're pretty fun and I honestly think I like them more than HTB's regular labs!</blockquote>
+
+	<i>Also, before we start with literally anything, make sure to unzip and run all malware files in an isolated VM.</i>
+	<br><br><br>
+
+	<h3> &#8674 [Easy] Loggy - Malware Analysis</h3>
+	<blockquote>At the time of writing this, there was only one other writeup for this sherlock that I found, and it was on breachforums! The writeup was really helpful too, and I'll give them credit for introducing me to the Golang Analyzer Extention that we'll use later and saved me a lot of time. So thank you, maggi from breachforums!</blockquote>
+	<p>We're given a zip file, which can be unzipped using the password given by hackthebox. Unzip it and read DANGER.txt to figure out how to get the malware binary. Once you get the binary (Loggy.exe), you're ready to go!</p>
+	<br>
+
+	<h4>[Task 1] What is the SHA-256 hash of this malware binary?</h4>
+	<p>Just use the sha256sum command on the binary to get the hash.</p>
+
+	<br>
+	<div id = "dash">
+		<blockquote id = "code">
+> sha256sum Loggy.exe 
+6acd8a362def62034cbd011e6632ba5120196e2011c83dc6045fcb28b590457c  Loggy.exe
+		</blockquote>
+	</div>
+
+	<br>
+	<h4>[Task 2] What programming language (and version) is this malware written in?</h4>
+	<p>If you just strings the whole binary, you can already see evidence that the malware was written in Go (lots of references to Golang). You can scroll through the whole strings output to find the version, but (to skip a few wasted hours trying to optimise my grep output) let's just import the file in Ghidra, which will give us our answer after importing.</p>
+	<p>You should see a window like this after importing. If you've already imported the program, you can go back to the first Ghidra screen, right click Loggy.exe>About program. Scroll to the bottom to get the version</p>
+
+	<img id = "center" src = "../assets/loggyghidra1.png">
+
+	<br>
+	<h4>[Task 3] There are multiple GitHub repos referenced in the static strings. Which GitHub repo would be most likely suggest the ability of this malware to exfiltrate data?</h4>
+	<p>To look through the static strings, you can either use the strings command and pipe the output to grep to look for strings containing 'github'. Or you can use the search strings function in Ghidra and filter to look for 'github'.</p>
+	<p>Either way you should find a repo containing the word 'ftp'. FTP is sussy because it's used to send files, and in the context of malware this would definitely be used for exfiltration. So this would be the repo that we're looking for -> github.com/jlaffaye/ftp</p>
+
+	<br>
+	<h4>[Task 4] Which function call suggests that the malware produces a file after execution?</h4>
+	<p>This is where the <a href = "https://github.com/mooncat-greenpy/Ghidra_GolangAnalyzerExtension">Ghidra Golang Analyzer Extension</a> comes in. You can use it to analyse the binary, the open the extension window to see lists of the Go functions, filenames, and datatypes. I looked through the function list and filtered to find matches with the string 'file'. I found a match that fit the description of the task the most, which is the answer.</p>
+
+	<img id = "center" src = "../assets/loggyghidra2.png">
+
+	<br>
+	<h4>[Task 5] You observe that the malware is exfiltrating data over FTP. What is the domain it is exfiltrating data to?</h4>
+	<p>You can either grep this with regex (yes, I tried and I got it), but the  more elegant solution is to look through the Ghidra decompiled code.</p>
+	<p>In the same Golang Analyzer window, we can filter to look through all the main functions. The function to look for is main.sendFilesOverFTP. Check that function out in the decompile view and you'll be able to see a nice and pretty domain to submit.</p>
+
+	<img id = "center" src = "../assets/loggyghidra3.png">
+
+</body>
+
