@@ -79,7 +79,7 @@
 	<p>I was super confused when I read this, thinking there was a hidden forensics challenge in this easy malware analysis room. But don't overthink like I did. Remember the screenshots in the folder earlier? The keylogger actually does have screenshot functions (hence the screenshot github repo we found earlier). Look through the screenshots to find the answer. Janice was really playing Solitaire at work LOL.</p>
 
 	<br><br>
-	<h3> &#8674 [Easy] Loggy - Malware Analysis</h3>
+	<h3> &#8674 [Easy] Heartbreaker Continuum - Malware Analysis</h3>
 	<blockquote>Sherlock Scenario: Following a recent report of a data breach at their company, the client submitted a potentially malicious executable file. The file originated from a link within a phishing email received by a victim user. Your objective is to analyze the binary to determine its functionality and possible consequences it may have on their network. By analyzing the functionality and potential consequences of this binary, you can gain valuable insights into the scope of the data breach and identify if it facilitated data exfiltration. Understanding the binary's capabilities will enable you to provide the client with a comprehensive report detailing the attack methodology, potential data at risk, and recommended mitigation steps.</blockquote>
 	<p>We're given a zip file, which can be unzipped using the password given by hackthebox. Unzip it to get Superstar_MemberCard.tiff.exe.</p>
 	<br>
@@ -140,13 +140,52 @@ $sCrt = "==gCNU2Yy9mRtASZzJXdjVmUtAicpREdldmchRHJggGdhBVLg0WZ0lULlZ3btVmUK0QZjJ3
 
 	<img id = "center" src = "../assets/heartbreakCcyberchef1.png">
 	
-	<p>We'll save this for the next task.</p>
+	<p>So it isn't base64, but a special custom encoding algorithm? We'll save this for a later task.</p>
 
 	<br>
 	<h4>[Task 5] Specify the hexadecimal offset where the obfuscated code of the identified original file begins in the binary.</h4>
 	<p>We've already found the obfuscated code, so now we gotta look for the hex offset. You can use the hex editor of your choice to look at the binary. I used hexedit to do this. The hex offset's on the furthest column to the left (2C74).</p>
 
 	<img id = "center" src = "../assets/heartbreakChexedit.png">
+
+	<br>
+	<h4>[Task 6] The threat actor concealed the plaintext script within the binary. Can you provide the encoding method used for this obfuscation? </h4>
+	<p>We saw the obfuscated payload back in task 4, and it's base64. </p>
+
+	<br>
+	<h4>[Task 7] What is the specific cmdlet utilized that was used to initiate file downloads?</h4>
+	<p>Searching google for 'cmdlet to download files' gave me results like 'Invoke-WebRequest' and 'Start-BitsTransfer'. But when searching for these words in the strings output for the binary, no results were returned. So, I got stuck for a bit. I totally forgot about the obfuscated payload! But if we go back to it, we see these strings at the following lines: </p>
+
+	<img id = "center" src = "../assets/heartbreakCstrings.png">
+
+	<p>If you look at the first line of the obfuscated text, you see that it's assigned to a $sCrt (secret?) variable. In these next strings, we have $enC, which takes the characters from $sCrt, and <i>reverses</i> the order of it. In the next line, it decodes it from base64. So this is the 'custom algorithm' the attacker used to obfuscated the payload. Well, we can create a recipie for this on cyberchef and try decoding it again:</p>
+
+	<img id = "center" src = "../assets/heartbreakCcyberchef2.png">
+
+	<p>And sure enough, there is the Invoke-WebRequest used to download something from that sussy IP.</p>
+
+	<br>
+	<h4>[Task 8] Could you identify any possible network-related Indicators of Compromise (IoCs) after examining the code? Separate IPs by comma and in ascending order.</h4>
+	<p>We can just look through the rest of this deobfuscated script to find these. In the earlier screenshot, you can see the script download a new Superstar_MemberCard.tiff from 44.206.187.144 and run it as a seperate process. Then we can see it doing stuff like checking for an AV, checking for outlook, collecting personal files.. after it collects personal files, it tries to install WinSCP to send it over to a server at 35.169.66.138. Cool, so that's our second IP address! After that we can see it send a really funny ILY email.</p>
+
+	<img id = "center" src = "../assets/heartbreakCcyberchef3.png">
+
+	<br>
+	<h4>[Task 9] The binary created a staging directory. Can you specify the location of this directory where the harvested files are stored? </h4>
+	<p>Referrr tooo thee scripttt... you can see it try and create a staging directory here.</p>
+
+	<img id = "center" src = "../assets/heartbreakCcyberchef4.png">
+
+	<br>
+	<h4>[Task 10] What MITRE ID corresponds to the technique used by the malicious binary to autonomously gather data?</h4>
+	<p>I just googled this to get T1119.</p>
+
+	<br>
+	<h4>[Task 11] What is the password utilized to exfiltrate the collected files through the file transfer program within the binary?</h4>
+	<p>Let's look at the code for exfiltrating the victim's personal files. </p>
+
+	<img id = "center" src = "../assets/heartbreakCcyberchef5.png">
+	<p>Honestly, I didn't even know that was the format for sending files over SFTP, but okay, it turns out SFTP uses [password]@[address]. Good to know!</p>
 
 </body>
 
