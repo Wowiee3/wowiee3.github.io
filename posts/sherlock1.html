@@ -1,12 +1,32 @@
 <head>
-	<link rel = "stylesheet" href= "../style.css"> 
-</head> 
+	<link rel = "stylesheet" href= "../style.css">
+	<title>HackTheBox Sherlock Writeups: Loggy and Heartbreak-Continuum</title>
+</head>
 
-<title>HackTheBox Sherlock Writeups: Loggy and Heartbreak-Continuum</title>
+<div id="container">
+            <div id="headerArea">
+                <nav id="navbar" style="margin-bottom: 10px;">
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../about.html">About Me</a></li>
+                        <li><a href="../writeups.html">Writeups</a></li>
+                        <li><a href="../blogs.html">Blog</a></li>
+                        <li><a href="https://github.com/Wowiee3">Github</a></li>
+                        <li><a href="#">Artwork</a></li>
+                    </ul>
+                </nav>
+            </div>
 
-<a href = "../index.html" id = "back"> &#8672 ../ </a>
+<div id="flex">
+                <aside id="leftSidebar" style="margin-right: 10px; position: fixed;">
+			<img src="https://www.fightersgeneration.com/characters4/yun-cvs2-dizz.gif" style="width:150px;">
+			<h2>HackTheBox Sherlocks</h2>
+			<h3>Try the labs yourself: </h3>
+			<li><a href = "https://app.hackthebox.com/sherlocks/Loggy">Loggy</a></li>
+			<li><a href= "https://app.hackthebox.com/sherlocks/Heartbreaker-Continuum">Heartbreaker</a></li>
+                </aside>
 
-<body id = "blog">
+<main style="max-width: 1000px; margin-left: 210px">
 	<h2>HackTheBox Sherlock Writeups</h2>
 	<blockquote>I recently got into doing sherlocks because I got a blue team internship so I reckoned I should try to do something more relevant for it. Honestly, I'm not sure if it'll help with my working skills but whatever, they're pretty fun and I honestly think I like them more than HTB's regular labs!</blockquote>
 
@@ -118,7 +138,7 @@ COFF/File header
 		<blockquote id = "code">
 Sections
     Section
-            Name:                            .text
+		Name:                            .text
 	    Virtual Size:                    0x9514 (38164 bytes)
 	    Virtual Address:                 0x2000
 	    Size Of Raw Data:                0x9600 (38400 bytes)
@@ -133,7 +153,8 @@ Sections
 	<div id = "dash">
 		<blockquote id = "code">
 > strings Superstar_MemberCard.tiff.exe (skipped some output)
-$sCrt = "==gCNU2Yy9mRtASZzJXdjVmUtAicpREdldmchRHJggGdhBVLg0WZ0lULlZ3btVmUK0QZjJ3bG1CIlNnc1NWZS1CIoRXYQR3YhJHd4V0dkACa0FGUtASblRXStUmdv1WZSpQDK0QfK0QKoQmblNlLtVGdJxWah1GJgACIgoQDsxWduRCI+ASKowGbBVmds92clJlLzRnbllGcpNWZS5SblRXSslWYtRCIgACIK0gCN0HIgACIK0wQDJEbvpjOdVGc5RFduVWawl2YlJFbpFWTs9kLr92bsRXdP5CcvJXZ05WSuU2YpZmZP5Cdm92cvJ3Yp10Wg0DIlBXeU5CduVWawl2YlJ1YjJGJgACIgACIgAiCNkiIzNXZyRGZBBCbpFWbFJiL0NWY052bjRCKkRWQuMHduVWawl2YlJlLtVGdJxWah1GJg0DI05WZ...
+<br>
+$sCrt = "==gCNU2Yy9mRtASZzJXdjVmUtAicpREdldmchRHJggGdhBVLg0WZ0lULlZ3btVmUK0QZjJ3bG1CIlNnc1NWZS1...
 		</blockquote>
 	</div>
 	<p>This is definitely base 64, and probably contains the payload of this program. If you got excited like me and immediately tried to decode it, you'd see that your output would be meaningless:</p>
@@ -160,7 +181,7 @@ $sCrt = "==gCNU2Yy9mRtASZzJXdjVmUtAicpREdldmchRHJggGdhBVLg0WZ0lULlZ3btVmUK0QZjJ3
 
 	<p>If you look at the first line of the obfuscated text, you see that it's assigned to a $sCrt (secret?) variable. In these next strings, we have $enC, which takes the characters from $sCrt, and <i>reverses</i> the order of it. In the next line, it decodes it from base64. So this is the 'custom algorithm' the attacker used to obfuscated the payload. Well, we can create a recipie for this on cyberchef and try decoding it again:</p>
 
-	<img id = "center" src = "../assets/heartbreakCcyberchef2.png">
+	<img id = "center" src = "../assets/heartbreakCcyberchef2.png" style="max-width:800px;">
 
 	<p>And sure enough, there is the Invoke-WebRequest used to download something from that sussy IP.</p>
 
@@ -186,6 +207,7 @@ $sCrt = "==gCNU2Yy9mRtASZzJXdjVmUtAicpREdldmchRHJggGdhBVLg0WZ0lULlZ3btVmUK0QZjJ3
 
 	<img id = "center" src = "../assets/heartbreakCcyberchef5.png">
 	<p>Honestly, I didn't even know that was the format for sending files over SFTP, but okay, it turns out SFTP uses [password]@[address]. Good to know!</p>
+</main>
+</div>
 
-</body>
-
+	    <footer id="footer" style="margin-top: 10px;">Layout from <a href="https://sadgrl.online/projects/layout-builder/">sadgrl<a></footer><br>

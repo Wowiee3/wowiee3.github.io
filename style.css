@@ -72,7 +72,7 @@ before and after the text */
 the other elements, you will need to move that div outside
 of the container */
     #container {
-	max-width: 900px;
+	max-width: 64%;
 	/* this is the width of your layout! */
 	/* if you change the above value, scroll to the bottom
 and change the media query according to the comment! */
@@ -89,6 +89,14 @@ EXCEPT for the navigation */
 you can add a line below here that says:
 text-decoration:none; */
     }
+
+#code {
+    text-align: justify;
+    font-family: "Courier New" , monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+}
 
     #header {
 	width: 100%;
@@ -143,6 +151,12 @@ you can add them directly to the <div id="header"></div> element! */
 	display: flex;
     }
 
+    a {
+	/* navbar text color */
+	font-weight: 800;
+	color: #ffb108;
+    }
+
     /* this colors BOTH sidebars
 if you want to style them separately,
 create styles for #leftSidebar and #rightSidebar */
@@ -172,7 +186,7 @@ if you're using both sidebars, the "order" value
 tells the CSS the order in which to display them.
 left sidebar is 1, content is 2, and right sidebar is 3! */
 
-    */ #leftSidebar {
+    #leftSidebar {
 	order: 1;
     }
 
@@ -238,7 +252,7 @@ and then subtrack it by 100. use this new number as the
 "max-width" value below
 */
 
-    @media only screen and (max-width: 800px) {
+    @media only screen and (max-width: 75%) {
 	#flex {
 	    flex-wrap: wrap;
 	}
@@ -266,6 +280,7 @@ feel free to play around with the order!
 	#navbar ul {
 	    flex-wrap: wrap;
 	}
+
     }
 .collapsible {
 	background-color: #f7f3eb;
