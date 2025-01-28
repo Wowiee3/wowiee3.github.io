@@ -1,40 +1,78 @@
 <head>
-  <link rel = "stylesheet" href = "style.css">
-  <title>About Me</title>
+	<link rel = "stylesheet" href = "style.css">
+	<title>About Me</title>
 </head>
+<div id="container">
+            <div id="headerArea">
+                
+                <nav id="navbar" style="margin-bottom: 10px;">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Me</a></li>
+                        <li><a href="writeups.html">Writeups</a></li>
+                        <li><a href="blogs.html">Blog</a></li>
+                        <li><a href="https://github.com/Wowiee3">Github</a></li>
+                        <li><a href="#">Artwork</a></li>
+                    </ul>
+                </nav>
+            </div>
 
-<a href = "index.html" id = "back"> &#8672 ../ </a>
+            <div id="flex">
+                <aside id="leftSidebar" style="margin-right: 10px;">
+			<h1>About Me</h1>
+			<img src="https://www.fightersgeneration.com/characters4/yun-cv2-tnt.gif" style="width:150px;">
+			<p><h3>Name: Wowiee</h3></p>
+			<p><h3>Born: October 2004</h3></p>
+			<p><h3>Favorite food: Vietnamese/Indian</h3></p>
+			<p><h3>Likes: Difficult games, tea, skipping rope</h3></p>
+			<p><h3>Dislikes: Java, slow programs</h3></p>
+                </aside>
+                <main>
+		<h2>It's pronounced Wow-ee</h2>
+		    <p>I'm a 20 year old Malaysian student who likes Linux, video games, and computers. I draw a little on the side as well, to keep my creative side in check :p</p>
+		<br>
+		<h2>Interests (click to expand)</h2>
+		<button class = "collapsible"><b>&gt CTF/Hacking</b></button>
+		<div class="content">
+			<p>Malware, Reverse engineering, Video Game RE, Forensics</p>
+			<p>Playing: THM, HTB, PicoCTF, Cyberdefenders</p>
+		</div>
+<br>
+		<button class = "collapsible"><b>&gt Linux/OSS</b></button>
+		<div class="content">
+			<p>Distro Hopping Map: Debian, Linux Mint, Arch, Pop!OS, Ubuntu, PiOS, Manjaro, OpenSUSE</p>
+			<p>Currently using: Arch Linux, DOOM Emacs + Vim, Firefox, OhMyZsh</p>
+		</div>
+<br>
+		<button class = "collapsible"><b>&gt Video Games</b></button>
+		<div class="content">
+			<p>Favorites: Pokemon (up to gen 5), Overwatch, Team Fortress 2, Project Zomboid, Street Fighter III 3rd Strike, Rimworld, Left 4 Dead, Disco Elysium, Metal Gear Solid, Crusader Kings, Fallout (up to NV), Bayonetta, Kingdom, Duelyst (RIP)</p>
+			<p>Rhythm Games: Chunithm, Maimai, Sound Voltex, DDR, Pump it Up, DanceRush, OSU!, OsuMania, Project Sekai, Bandori, that one Roblox 4 lane game </p>
+		</div>
+<br>
+		<button class = "collapsible"><b>&gt Music</b></button>
+		<div class="content">
+			<p>Bladee/Drain Gang, Nujabes, King Crimson, Weezer, Oingo Boingo, Vocaloid (fav prod: iyowa + kikuo), American Football, Mom Jeans, Hideki Naganuma</p>
+		</div>
 
-<body id = "blog">
+                </main>
+        </div>
 
+	    <footer id="footer" style="margin-top: 10px;">Layout from <a href="https://sadgrl.online/projects/layout-builder/">sadgrl<a></footer><br>
 
-<h2>
-Hello, I'm Wowiee (pronounced wow-eee) !
-</h2><br><br>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
 
-<blockquote>
-<h3>
-About Me
-</h3>
-  <p>
-I'm a student from Malaysia who likes tech. I'm currently studying cybersecurity.<br>
-I used to draw as well. Maybe you'll see some of my drawings scattered around the website.
-</p><br>
-
-  <h3>
-This Website
-</h3>
-  <p>
-    Here is where I post blogs and writeups.<br>
-    Writeups are walkthroughs of CTF challenges (or others) that I find interesting.<br>
-    Blogs are rambly posts that I think are sane enough to post on the internet (my judgement may be wrong).<br>
-</p><br>
-
-  <h3>
-Contact
-</h3>
-  <p>
-My main point of contact is on Discord at <b>Wowiee#1510</b>
-</p>
-
-  </blockquote>
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+} 
+</script>
