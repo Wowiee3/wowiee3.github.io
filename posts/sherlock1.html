@@ -71,20 +71,20 @@
 	<h4>[Task 5] Which function call suggests that the malware produces a file after execution?</h4>
 	<p>This is where the <a href = "https://github.com/mooncat-greenpy/Ghidra_GolangAnalyzerExtension">Ghidra Golang Analyzer Extension</a> comes in. You can use it to analyse the binary, the open the extension window to see lists of the Go functions, filenames, and datatypes. I looked through the function list and filtered to find matches with the string 'file'. I found a match that fit the description of the task the most, which is the answer.</p>
 
-	<img id = "center" src = "../assets/loggyghidra2.png">
+	<img id = "center" src = "../assets/loggyghidra2.png" style="max-width:70%">
 
 	<br>
 	<h4>[Task 6] You observe that the malware is exfiltrating data over FTP. What is the domain it is exfiltrating data to?</h4>
 	<p>You can either grep this with regex (yes, I tried and I got it), but the  more elegant solution is to look through the Ghidra decompiled code.</p>
 	<p>In the same Golang Analyzer window, we can filter to look through all the main functions. The function to look for is main.sendFilesOverFTP. Check that function out in the decompile view and you'll be able to see a nice and pretty domain to submit.</p>
 
-	<img id = "center" src = "../assets/loggyghidra3.png">
+	<img id = "center" src = "../assets/loggyghidra3.png" style="max-width:90%">
 
 	<br>
 	<h4>[Task 7] What are the threat actor’s credentials?</h4>
 	<p>Look at the same function (main.sendFilesOverFTP) and scroll down a bit. There's a login method, and the attacker left their credentials here in cleartext.</p>
 
-	<img id = "center" src = "../assets/loggyghidra4.png">
+	<img id = "center" src = "../assets/loggyghidra4.png" style="max-width:90%">
 
 	<br>
 	<h4>[Task 8] What file keeps getting written to disk?</h4>
@@ -167,7 +167,7 @@ $sCrt = "==gCNU2Yy9mRtASZzJXdjVmUtAicpREdldmchRHJggGdhBVLg0WZ0lULlZ3btVmUK0QZjJ3
 	<h4>[Task 5] Specify the hexadecimal offset where the obfuscated code of the identified original file begins in the binary.</h4>
 	<p>We've already found the obfuscated code, so now we gotta look for the hex offset. You can use the hex editor of your choice to look at the binary. I used hexedit to do this. The hex offset's on the furthest column to the left (2C74).</p>
 
-	<img id = "center" src = "../assets/heartbreakChexedit.png">
+	<img id = "center" src = "../assets/heartbreakChexedit.png" style="max-width:70%">
 
 	<br>
 	<h4>[Task 6] The threat actor concealed the plaintext script within the binary. Can you provide the encoding method used for this obfuscation? </h4>
@@ -177,11 +177,11 @@ $sCrt = "==gCNU2Yy9mRtASZzJXdjVmUtAicpREdldmchRHJggGdhBVLg0WZ0lULlZ3btVmUK0QZjJ3
 	<h4>[Task 7] What is the specific cmdlet utilized that was used to initiate file downloads?</h4>
 	<p>Searching google for 'cmdlet to download files' gave me results like 'Invoke-WebRequest' and 'Start-BitsTransfer'. But when searching for these words in the strings output for the binary, no results were returned. So, I got stuck for a bit. I totally forgot about the obfuscated payload! But if we go back to it, we see these strings at the following lines: </p>
 
-	<img id = "center" src = "../assets/heartbreakCstrings.png">
+	<img id = "center" src = "../assets/heartbreakCstrings.png" style="max-width:70%">
 
 	<p>If you look at the first line of the obfuscated text, you see that it's assigned to a $sCrt (secret?) variable. In these next strings, we have $enC, which takes the characters from $sCrt, and <i>reverses</i> the order of it. In the next line, it decodes it from base64. So this is the 'custom algorithm' the attacker used to obfuscated the payload. Well, we can create a recipie for this on cyberchef and try decoding it again:</p>
 
-	<img id = "center" src = "../assets/heartbreakCcyberchef2.png" style="max-width:800px;">
+	<img id = "center" src = "../assets/heartbreakCcyberchef2.png" style="max-width:90%;">
 
 	<p>And sure enough, there is the Invoke-WebRequest used to download something from that sussy IP.</p>
 
