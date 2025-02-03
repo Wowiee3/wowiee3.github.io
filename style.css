@@ -8,7 +8,7 @@ the images as variables */
 
     :root {
 	--header-image: url('https://sadhost.neocities.org/images/layouts/wp.jpeg');
-	--body-bg-image: url('https://bettysgraphics.neocities.org/images/backgrounds/pattern%20228.gif');
+	--body-bg-image: url('https://www.fightersgeneration.com/nf9/game/stage/streetfighter3-3rdstrike-ryu-stage.gif');
 
 	/* colors */
 	--content: #43256E;
@@ -51,9 +51,9 @@ and then link it! Many fonts have separate files for each style
 	margin: 0;
 	background-color: #08031A;
 	/* you can delete the line below if you'd prefer to not use an image */
-	background-size: 50px;
 	color: #000000;
 	background-image: var(--body-bg-image);
+	background-size: cover;
     }
 
     * {
@@ -220,6 +220,10 @@ left sidebar is 1, content is 2, and right sidebar is 3! */
     strong {
 	/* this styles bold text */
 	color: #ffb108;
+    }
+    
+    li {
+	margin: 3px 0;
     }
 
     /* this is just a cool box, it's the darker colored one */
