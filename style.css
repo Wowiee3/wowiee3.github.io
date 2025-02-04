@@ -54,6 +54,8 @@ and then link it! Many fonts have separate files for each style
 	color: #000000;
 	background-image: var(--body-bg-image);
 	background-size: cover;
+	background-attachment: fixed;
+	background-position: center;
     }
 
     * {
