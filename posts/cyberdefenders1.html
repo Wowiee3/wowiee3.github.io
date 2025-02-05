@@ -227,6 +227,63 @@ function CpPT(bOe3, F5vZ) {
 
 	<p>The hints provided explained that the two loops were used to set up the S-box, which is used for the <b>key scheduling algorithm.</b></p>
 
+	<h4>[Task 13] The function CpPT requires two arguments, where does the value of the first argument come from?</h4>
+
+	<p>Here's the first line declaring the function:</p>
+
+	<div id = "dash">
+		<blockquote id = "code">
+			function CpPT(bOe3, F5vZ) {
+		</blockquote>
+	</div>
+
+	<p>The first parameter for CpPT() is <b>bOe3</b>. If we look through other instances of this through the script, there are only two other mentions in the function itself. So let's look outside the script to where the function is called, to see what argument was given to it.</p>
+
+	<div id = "dash">
+		<blockquote id = "code">
+	try {
+	var wvy1 = WScript.Arguments;
+	var ssWZ = wvy1(0);
+	var ES3c = y3zb();
+	ES3c = LXv5(ES3c);
+	ES3c = CpPT(ssWZ, ES3c);
+	eval(ES3c);
+} catch (e) {
+	WScript.Quit();
+}
+		</blockquote>
+	</div>
+
+	<p>CpPT() is called at the start, and it was given the argument ssWz and ES3c. Above we can see that ssWz was assigned the value of wvy1(0), which is the first <b>command-line argument</b></p>
+
+	<h4>[Task 14] For the function CpPT, what does the first argument represent?</h4>
+
+	<p>K E Y</p>
+
+	<h4>[Task 15] What encryption algorithm does the function CpPT implement in this script?</h4>
+	
+	<p>It's the RC4 algorithm. You can kinda tell by the key-scheduling algorithm and the for loops going through each character (like how a stream cipher would).</p>
+
+	<h4>[Task 16] What function is responsible for executing the deobfuscated code?</h4>
+
+	<p>In the first try-catch section of the script, you can see that <b>Eval</b> is used. I was really confused by this question since I thought they were referring to those four-letter obfuscated functions.</p>
+
+	<h4>[Task 17] What Windows Script Host program can be used to execute this script in command-line mode?</h4>
+
+	<p>I just searched up "windows script host execute command line" and found <b>wscript.exe</b>, the windows script host program, which led to me finding <b>cscript.exe</b>, which runs scripts in the command line.</p>
+
+	<h4>[Task 18] What is the name of the first function defined in the deobfuscated code?</h4>
+
+	<p>Okay, time for deobfuscation. Luckily it's pretty simple for us to do just in CyberChef. We already have the key from task 3, we know we're using RC4, and we know the payload is base64 encoded.</p>
+
+	<p>With the obfuscated payload as our input, create a CyberChef recipe to decode the obfuscated payload from base64, then apply the RC4 decode with the key "EzZETcSXyKAdF_e5I2i1". Now you can see the rest of the payload, with this as our first function:</p>
+
+	<div id = "dash">
+		<blockquote id = "code">
+	function UspD(zDmy)
+		</blockquote>
+	</div>
+	
 </main>
 </div>
 
