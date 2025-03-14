@@ -1,0 +1,201 @@
+<head>
+	<link rel = "stylesheet" href= "../style.css">
+	<title>PicoCTF Writeup: WinAntiDbg0x100-300</title>
+</head>
+
+<div id="container">
+            <div id="headerArea">
+                <nav id="navbar" style="margin-bottom: 10px;">
+                    <ul>
+                        <li><a href="../index.html">Home</a></li>
+                        <li><a href="../about.html">About Me</a></li>
+                        <li><a href="../writeups.html">Writeups</a></li>
+                        <li><a href="../blogs.html">Blog</a></li>
+                        <li><a href="https://github.com/Wowiee3">Github</a></li>
+                        <li><a href="#">Artwork</a></li>
+                    </ul>
+                </nav>
+            </div>
+
+<div id="flex">
+                <aside id="leftSidebar" style="margin-right: 10px; position: fixed;">
+			<img src="https://www.fightersgeneration.com/characters4/yun-cvs2-dizz.gif" style="width:150px;">
+			<h2>PicoCTF Writeup</h2>
+			<b>Tools used:</b>
+			<li>IDA Free</li>
+			<h3>Try the labs yourself: </h3>
+			<li><a href = "https://play.picoctf.org/practice?category=3&originalEvent=73&page=1">PicoCTF 2024 Rev Challenges</a></li>
+                </aside>
+
+<main style="max-width: 1000px; margin-left: 210px">
+	<h1>PicoCTF Windows Anti-Debug Rev Challs</h1>
+	<blockquote>PicoCTF 2025 is tomorrow (at the time of writing this), so I did some challenges from last year for a bit of practice. I think all I've been doing for a while was rev stuff, so I did the WinAntiDbg challenges.</blockquote>
+
+	<i>Recently I've been using <a href="https://github.com/mandiant/flare-vm">FlareVM</a> which comes with a bunch of tools for RE. It's not necessary to use it for these challenges, but I just wanted to share.</i>
+	<br><br><br>
+
+	<h3> &#8674 [Medium] WinAntiDbg0x100</h3>
+	<blockquote>Challenge Description: This challenge will introduce you to 'Anti-Debugging.' Malware developers don't like it when you attempt to debug their executable files because debugging these files reveals many of their secrets! That's why, they include a lot of code logic specifically designed to interfere with your debugging process. Now that you've understood the context, go ahead and debug this Windows executable! This challenge binary file is a Windows console application and you can start with running it using cmd on Windows.</blockquote>
+	<p>We'll start with running the executable in cmd like they told us to:</p>
+
+	<img id = "center" src = "../assets/WAD100_1.png" style="max-width: 70%;">
+
+	<p>The challenge only starts when run in a debugger. I chose to use IDA because it comes with a disassembler and debugger. Start the debugger and check the debug output:</p>
+
+	<img id = "center" src = "../assets/WAD100_2.png" style="max-width: 100%;">
+
+	<p></p>
+
+	<br>
+	<h4>[Task 3] There are multiple GitHub repos referenced in the static strings. Which GitHub repo would be most likely suggest the ability of this malware to exfiltrate data?</h4>
+	<p>To look through the static strings, you can either use the strings command and pipe the output to grep to look for strings containing 'github'. Or you can use the search strings function in Ghidra and filter to look for 'github'.</p>
+	<p>Either way you should find a repo containing the word 'ftp'. FTP is sussy because it's used to send files, and in the context of malware this would definitely be used for exfiltration. So this would be the repo that we're looking for -> github.com/jlaffaye/ftp</p>
+
+	<br>
+	<h4>What dependency, expressed as a GitHub repo, supports Janice’s assertion that she thought she downloaded something that can just take screenshots?</h4>
+	<p>Use your preferred method of searching through strings containing 'github', like the last task. You should find 'github.com/kbinani/screenshot' easily!</p>
+
+	<br>
+	<h4>[Task 5] Which function call suggests that the malware produces a file after execution?</h4>
+	<p>This is where the <a href = "https://github.com/mooncat-greenpy/Ghidra_GolangAnalyzerExtension">Ghidra Golang Analyzer Extension</a> comes in. You can use it to analyse the binary, the open the extension window to see lists of the Go functions, filenames, and datatypes. I looked through the function list and filtered to find matches with the string 'file'. I found a match that fit the description of the task the most, which is the answer.</p>
+
+	<img id = "center" src = "../assets/loggyghidra2.png" style="max-width:70%">
+
+	<br>
+	<h4>[Task 6] You observe that the malware is exfiltrating data over FTP. What is the domain it is exfiltrating data to?</h4>
+	<p>You can either grep this with regex (yes, I tried and I got it), but the  more elegant solution is to look through the Ghidra decompiled code.</p>
+	<p>In the same Golang Analyzer window, we can filter to look through all the main functions. The function to look for is main.sendFilesOverFTP. Check that function out in the decompile view and you'll be able to see a nice and pretty domain to submit.</p>
+
+	<img id = "center" src = "../assets/loggyghidra3.png" style="max-width:90%">
+
+	<br>
+	<h4>[Task 7] What are the threat actor’s credentials?</h4>
+	<p>Look at the same function (main.sendFilesOverFTP) and scroll down a bit. There's a login method, and the attacker left their credentials here in cleartext.</p>
+
+	<img id = "center" src = "../assets/loggyghidra4.png" style="max-width:90%">
+
+	<br>
+	<h4>[Task 8] What file keeps getting written to disk?</h4>
+	<p>If you look through both the main.sendFilesOverFTP and main.main functions, you can see a file called keylog.txt being opened and written to repeatedly. This is the file where the keystrokes are stored. And I'm pretty sure that's the same keylog file we have now.</p>
+
+	<br>
+	<h4>[Task 9] When Janice changed her password, this was captured in a file. What is Janice's username and password?</h4>
+	<p>Look through keylog.txt to get this.</p>
+
+	<br>
+	<h4>[Task 10] What app did Janice have open the last time she ran the "screenshot app"?</h4>
+	<p>I was super confused when I read this, thinking there was a hidden forensics challenge in this easy malware analysis room. But don't overthink like I did. Remember the screenshots in the folder earlier? The keylogger actually does have screenshot functions (hence the screenshot github repo we found earlier). Look through the screenshots to find the answer. Janice was really playing Solitaire at work LOL.</p>
+
+	<br><br>
+	<h3> &#8674 [Easy] Heartbreaker Continuum - Malware Analysis</h3>
+	<blockquote>Sherlock Scenario: Following a recent report of a data breach at their company, the client submitted a potentially malicious executable file. The file originated from a link within a phishing email received by a victim user. Your objective is to analyze the binary to determine its functionality and possible consequences it may have on their network. By analyzing the functionality and potential consequences of this binary, you can gain valuable insights into the scope of the data breach and identify if it facilitated data exfiltration. Understanding the binary's capabilities will enable you to provide the client with a comprehensive report detailing the attack methodology, potential data at risk, and recommended mitigation steps.</blockquote>
+	<p>We're given a zip file, which can be unzipped using the password given by hackthebox. Unzip it to get Superstar_MemberCard.tiff.exe.</p>
+	<br>
+
+	<br>
+	<h4>[Task 1] To accurately reference and identify the suspicious binary, please provide its SHA256 hash.</h4>
+	<p>Note taken: always get the hash of your binary before analysis.</p>
+	
+	<br>
+	<div id = "dash">
+		<blockquote id = "code">
+> sha256sum Superstar_MemberCard.tiff.exe 
+12daa34111bb54b3dcbad42305663e44e7e6c3842f015cccbbe6564d9dfd3ea3  Superstar_MemberCard.tiff.exe
+		</blockquote>
+	</div>
+
+	<br>
+	<h4>[Task 2] When was the binary file originally created, according to its metadata (UTC)?</h4>
+	<p>You can get this with exiftool, under the Time Stamp field (if you use this method, remember to convert to UTC!) Otherwise, on a linux machine you can use the readpe command to get a lot of information about this binary. Alternatively on windows, you can use pestudio.</p>
+	<br>
+	<div id = "dash">
+		<blockquote id = "code">
+> readpe Superstar_MemberCard.tiff.exe (skipped some output)
+COFF/File header
+	    Machine:                         0x14c IMAGE_FILE_MACHINE_I386
+	    Number of sections:              3
+	    Date/time stamp:                 1710326286 (Wed, 13 Mar 2024 10:38:06 UTC)
+		</blockquote>
+	</div>
+
+	<br>
+	<h4>[Task 3] Examining the code size in a binary file can give indications about its functionality. Could you specify the byte size of the code in this binary?</h4>
+	<p>I was a bit confused about the wording in this question, but they were talking about the literal code size. Code is stored in the .text section in a binary. Luckily, the output of readpe also shows us the size of each of the sections, in bytes. We want the raw data size.</p>
+	<br>
+	<div id = "dash">
+		<blockquote id = "code">
+Sections
+    Section
+		Name:                            .text
+	    Virtual Size:                    0x9514 (38164 bytes)
+	    Virtual Address:                 0x2000
+	    Size Of Raw Data:                0x9600 (38400 bytes)
+		</blockquote>
+	</div>
+
+	<br>
+	<h4>[Task 4] It appears that the binary may have undergone a file conversion process. Could you determine its original filename?</h4>
+	<p>Before attempting the tasks, I strings'd the binary out of habit. At the bottom of the strings output, there's a 'newILY.ps1' string. It immediately stood out being a powershell script, and also because it was very similar to the notorious ILOVEYOU computer worm. And sure enough, it's the original filename.</p>
+	<p>If you look through the strings output some more, you should see a huge block of obfuscated text.</p>
+	<br>
+	<div id = "dash">
+		<blockquote id = "code">
+> strings Superstar_MemberCard.tiff.exe (skipped some output)
+<br>
+$sCrt = "==gCNU2Yy9mRtASZzJXdjVmUtAicpREdldmchRHJggGdhBVLg0WZ0lULlZ3btVmUK0QZjJ3bG1CIlNnc1NWZS1...
+		</blockquote>
+	</div>
+	<p>This is definitely base 64, and probably contains the payload of this program. If you got excited like me and immediately tried to decode it, you'd see that your output would be meaningless:</p>
+
+	<img id = "center" src = "../assets/heartbreakCcyberchef1.png">
+	
+	<p>So it isn't base64, but a special custom encoding algorithm? We'll save this for a later task.</p>
+
+	<br>
+	<h4>[Task 5] Specify the hexadecimal offset where the obfuscated code of the identified original file begins in the binary.</h4>
+	<p>We've already found the obfuscated code, so now we gotta look for the hex offset. You can use the hex editor of your choice to look at the binary. I used hexedit to do this. The hex offset's on the furthest column to the left (2C74).</p>
+
+	<img id = "center" src = "../assets/heartbreakChexedit.png" style="max-width:70%">
+
+	<br>
+	<h4>[Task 6] The threat actor concealed the plaintext script within the binary. Can you provide the encoding method used for this obfuscation? </h4>
+	<p>We saw the obfuscated payload back in task 4, and it's base64. </p>
+
+	<br>
+	<h4>[Task 7] What is the specific cmdlet utilized that was used to initiate file downloads?</h4>
+	<p>Searching google for 'cmdlet to download files' gave me results like 'Invoke-WebRequest' and 'Start-BitsTransfer'. But when searching for these words in the strings output for the binary, no results were returned. So, I got stuck for a bit. I totally forgot about the obfuscated payload! But if we go back to it, we see these strings at the following lines: </p>
+
+	<img id = "center" src = "../assets/heartbreakCstrings.png" style="max-width:70%">
+
+	<p>If you look at the first line of the obfuscated text, you see that it's assigned to a $sCrt (secret?) variable. In these next strings, we have $enC, which takes the characters from $sCrt, and <i>reverses</i> the order of it. In the next line, it decodes it from base64. So this is the 'custom algorithm' the attacker used to obfuscated the payload. Well, we can create a recipie for this on cyberchef and try decoding it again:</p>
+
+	<img id = "center" src = "../assets/heartbreakCcyberchef2.png" style="max-width:90%;">
+
+	<p>And sure enough, there is the Invoke-WebRequest used to download something from that sussy IP.</p>
+
+	<br>
+	<h4>[Task 8] Could you identify any possible network-related Indicators of Compromise (IoCs) after examining the code? Separate IPs by comma and in ascending order.</h4>
+	<p>We can just look through the rest of this deobfuscated script to find these. In the earlier screenshot, you can see the script download a new Superstar_MemberCard.tiff from 44.206.187.144 and run it as a seperate process. Then we can see it doing stuff like checking for an AV, checking for outlook, collecting personal files.. after it collects personal files, it tries to install WinSCP to send it over to a server at 35.169.66.138. Cool, so that's our second IP address! After that we can see it send a really funny ILY email.</p>
+
+	<img id = "center" src = "../assets/heartbreakCcyberchef3.png">
+
+	<br>
+	<h4>[Task 9] The binary created a staging directory. Can you specify the location of this directory where the harvested files are stored? </h4>
+	<p>Referrr tooo thee scripttt... you can see it try and create a staging directory here.</p>
+
+	<img id = "center" src = "../assets/heartbreakCcyberchef4.png">
+
+	<br>
+	<h4>[Task 10] What MITRE ID corresponds to the technique used by the malicious binary to autonomously gather data?</h4>
+	<p>I just googled this to get T1119.</p>
+
+	<br>
+	<h4>[Task 11] What is the password utilized to exfiltrate the collected files through the file transfer program within the binary?</h4>
+	<p>Let's look at the code for exfiltrating the victim's personal files. </p>
+
+	<img id = "center" src = "../assets/heartbreakCcyberchef5.png">
+	<p>Honestly, I didn't even know that was the format for sending files over SFTP, but okay, it turns out SFTP uses [password]@[address]. Good to know!</p>
+</main>
+</div>
+
+	    <footer id="footer" style="margin-top: 10px;">Layout from <a href="https://sadgrl.online/projects/layout-builder/">sadgrl<a></footer><br>
